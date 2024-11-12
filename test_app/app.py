@@ -1,6 +1,7 @@
 from flask import Flask, jsonify
 import os
 import datetime
+import pytz
 import subprocess
 
 app = Flask(__name__)
@@ -13,8 +14,12 @@ def home():
 def htop():
     name = "Raamji A - 21i241"
     username = os.getenv("USER") or os.getenv("USERNAME")
-    server_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    top_output = subprocess.getoutput("top -b -n 1") 
+    
+    # Set the timezone to IST
+    ist = pytz.timezone("Asia/Kolkata")
+    server_time = datetime.datetime.now(ist).strftime("%Y-%m-%d %H:%M:%S")
+    
+    top_output = subprocess.getoutput("top -b -n 1")  
     return f"<pre>Name: {name}\nUsername: {username}\nServer Time: {server_time} (IST)\n\n{top_output}</pre>"
 
 if __name__ == "__main__":
